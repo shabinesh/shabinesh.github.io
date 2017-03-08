@@ -6,7 +6,22 @@
     <description>Recent content on Hello</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+    <lastBuildDate>Wed, 08 Mar 2017 10:14:51 +0530</lastBuildDate>
     <atom:link href="https://shabinesh.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>hello world</title>
+      <link>https://shabinesh.github.io/hello-world/</link>
+      <pubDate>Wed, 08 Mar 2017 10:14:51 +0530</pubDate>
+      
+      <guid>https://shabinesh.github.io/hello-world/</guid>
+      <description>
+
+&lt;h1 id=&#34;hello-world&#34;&gt;Hello world&lt;/h1&gt;
+
+&lt;h3 id=&#34;let-me-put-it-this-way-i-am-going-to-write-here-to-scratch-my-own-itch-and-to-improve-my-own-understanding&#34;&gt;Let me put it this way, I am going to write here to scratch my own itch and to improve my own understanding.&lt;/h3&gt;
+</description>
+    </item>
     
   </channel>
 </rss>
