@@ -1,0 +1,99 @@
+---
+title: "Mocking AWS Postgres Extensions"
+date: 2020-06-06T16:13:34+02:00
+draft: false
+tags:
+- docker
+- aws
+categories:
+- self references
+---
+
+* Mocking AWS PG Extensions 
+  
+  The project I am working on uses RDS with aws_s3 (& aws_commons)
+  postgres extensions. However these extensions are also need postgres
+  docker container used in the CI for integration tests to not break
+  the migrations. A mock extension was built to keep the tests from
+  breaking. 
+
+  - Create *.control* files
+  - Create the schema for the module being created
+  - Add the functions in the schema in sql files
+
+ In this case there are two *.control* files, /aws_common.control/ & /aws_s3.control/
+
+ #+CAPTION: /aws_common.control/
+ #+BEGIN_SRC 
+ comment = 'aws_commons mock'
+ default_version = '1.0'
+ module_pathname = '$libdir/aws_commons'
+ relocatable = false
+ #+END_SRC
+
+ #+CAPTION: /aws_s3.control/
+ #+BEGIN_SRC 
+ comment = 'aws_s3 mock'
+ default_version = '1.0'
+ module_pathname = '$libdir/aws_s3'
+ relocatable = false
+ #+END_SRC
+
+ We then define the functions that these modules export in a file name
+ of the form /<module_name>-<default_version>.sql/. 
+
+ #+CAPTION: /aws_commons--1.0.sql/
+ #+BEGIN_SRC sql
+ create schema if not exists aws_commons;
+
+ create type aws_commons.uri as (
+    bucket varchar,
+    filepath varchar,
+    s3_region varchar
+ );
+
+ create or replace function aws_commons.create_s3_uri(bucket varchar, filepath varchar, s3_region varchar) returns aws_commons.uri as
+    $$
+    begin
+        return row(bucket, filepath, s3_region);
+    end
+    $$
+ language plpgsql;
+ #+END_SRC
+
+ #+CAPTION: /aws_s3--1.0.sql/
+ #+BEGIN_SRC sql
+ create schema if not exists aws_s3;
+
+ create or replace function aws_s3.table_import_from_s3(tbl varchar, cols varchar, opts varchar, uri aws_commons.uri) returns void as
+     $$
+     begin
+         return;
+     end;
+     $$
+ language plpgsql;
+ #+END_SRC
+
+ These are now installable and can be installed by copying them to the right path
+
+ #+CAPTION: /Dockerfile/
+ #+BEGIN_SRC 
+ FROM postgres:12-alpine
+ 
+ ENV POSTGRES_DB ''
+ ENV POSTGRES_USER ''
+ ENV POSTGRES_PASSWORD ''
+ 
+ COPY dummy_extensions/extensions.sql /docker-entrypoint-initdb.d/
+ COPY dummy_extensions/ /usr/local/share/postgresql/extension/
+ #+END_SRC
+
+ And /extensions.sql/ would install it when the containers boots up
+
+ #+CAPTION: /extensions.sql/
+ #+BEGIN_SRC 
+ create extension aws_commons;
+ create extension aws_s3;
+ #+END_SRC
+
+ There are [[https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/PostgreSQL.Procedural.Importing.html#aws_s3.table_import_from_s3][others functions]] that could be mocked, this was all needed for me.

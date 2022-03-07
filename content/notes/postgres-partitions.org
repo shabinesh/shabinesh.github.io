@@ -1,0 +1,143 @@
+---
+title: "Postgres Partitions"
+date: 2021-01-05T14:37:33+01:00
+draft: false
+tags:
+- study notes
+- postgresql
+---
+
+* Postgres partitions
+
+  *A better resources is [[https://www.postgresql.org/docs/10/ddl-partitioning.html]]*
+
+  Postgres let's us split a large table in to smaller entities, done for managebility, performance. 
+  
+*** Typical usecase includes:
+  - Improve query performance of frequently accessed data from fewer partitions. 
+  - Bulk delete or upload. Eg: Delete all records more than 3 months old.
+  - Seperate stale data from actively used data.
+
+** Partitioning 
+*** Declarative
+    
+    Declarative partitioning lets us specify the desired outcome without much details on how the partition happens behind the scenes. 
+    
+    For instance we have a large table with orders partitioned by country
+
+***** Create the table to be partitioned
+    #+BEGIN_SRC sql
+    CREATE TABLE orders
+    (
+        order_id   INT     NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW(),
+        item_id    INT,
+        country    VARCHAR NOT NULL,
+        PRIMARY KEY (order_id, country)
+    ) PARTITION BY LIST (country);
+    #+END_SRC
+
+    Please note that primary key is a combination of table's /primary
+    key/ (order_id) and the /partition key/ (country). This is a
+    limitation of partitioned table, partition key must be part of the
+    primary key.
+
+***** Create the partitions
+
+    #+BEGIN_SRC sql
+    CREATE TABLE orders_de PARTITION OF orders FOR VALUES IN ('de');
+    CREATE TABLE orders_in PARTITION OF orders FOR VALUES IN ('in');
+    #+END_SRC
+    
+    Data is stored in the respective partition without caring about
+    which partition the data is saved. In the following, data inserted
+    into the /orders/ are queriable from /orders/ and also from the
+    partition table /orders_de/.
+
+    #+BEGIN_SRC sql
+    INSERT INTO orders (order_id, item_id, country)  VALUES (12345, 4352, 'de');
+    SELECT * FROM orders;
+    SELECT * FROM orders_de;
+    #+END_SRC
+    
+    Output
+
+    |order_id|date                          |item_id|country|
+    |--------|------------------------------|-------|-------|
+    | 12345  |  2021-01-05 16:17:20.377778  | 4352  |  de   |
+
+
+*** Joins on partitioned tables
+
+    Lets introduce billing table which is also partitioned
+
+    #+BEGIN_SRC sql
+    CREATE TABLE billing
+    (
+        billing_id INT,
+        order_id   INT,
+        price      INT,
+        country    VARCHAR,
+
+        PRIMARY KEY (billing_id, country),
+        FOREIGN KEY (order_id, country) REFERENCES orders (order_id, country)
+    ) PARTITION BY LIST (country);
+
+    CREATE TABLE billing_de PARTITION OF billing FOR VALUES IN ('de');
+    CREATE TABLE billing_in PARTITION OF billing FOR VALUES IN ('in');
+    #+END_SRC
+
+    
+
+    For partition-wise joins to work (as intended), they should be
+    equi-partitioned. For example, for the below query - the join will
+    find matching partitions based on bounds. In this case, the join
+    pairs are /orders_de/, /billing_de/ and /orders_in/, /billing_in/.
+    But if /billing/ table had another partition /billing_us/, it will
+    not be paired with anything.
+
+
+    #+BEGIN_SRC sql
+    SELECT * FROM orders
+    JOIN billing b ON orders.order_id = b.order_id AND orders.country = b.country;
+    #+END_SRC
+    
+*** Adding and removing partitions 
+    
+**** Add or attach partition
+    If we started accepting orders from US, then this would be as easy as create a partition and attached the partition.
+
+    #+BEGIN_SRC sql
+    create table orders_us partition of orders for values in ('us');
+    create table billing_us partition of billing for values in ('us');
+    #+END_SRC
+    
+    Other options is to create a table which is not a partition and attach it as a partition.
+
+    #+BEGIN_SRC sql
+    CREATE TABLE billing_us
+    (LIKE billing INCLUDING DEFAULTS INCLUDING CONSTRAINTS);
+
+    ALTER TABLE billing ATTACH PARTITION billing_us
+    FOR VALUES IN ('us');
+    #+END_SRC
+
+**** Remove partitions
+    An to remove a partition, dropping the partition works. However
+    this requires getting an exclusive lock on the parent table. But
+    detaching partitions is another options which would retain the
+    table.
+
+    #+BEGIN_SRC sql
+    ALTER TABLE orders DETACH PARTITION orders_us;
+    #+END_SRC
+
+*** Storage costs
+
+    Partitions are meant to make large (say > 100 GB) as manageble
+    entities. There are instances where we don't need to access some
+    tables actively. The less active data can be stored in slower
+    storage devices to reduce cost. This is where tablespaces are
+    useful, each partition can be created under different tablespaces.
+    
+    

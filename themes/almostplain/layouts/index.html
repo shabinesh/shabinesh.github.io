@@ -1,0 +1,43 @@
+{{ define "main" }}
+  <section class="article-list">
+    <h1>Sab&#39;s blog</h1>
+
+    <h2>Posts</h2>
+    {{- range where .Site.RegularPages "Type" "posts" }}
+    <div class="article">
+      <span class="date">{{ .Date.Format "January 2, 2006" }}</span>
+      <a href="{{ .Permalink }}">{{ .Title }}</a>
+    </div>
+    {{ end }}
+    </div>
+
+    <h2>Notes</h2>
+    {{- range where .Site.RegularPages "Type" "notes" }}
+    <div class="article">
+      <span class="date">{{ .Date.Format "January 2, 2006" }}</span>
+      <a href="{{ .Permalink }}">{{ .Title }}</a>
+    </div>
+    {{ end }}
+  </section>
+
+  <aside>
+      <div class="text-center">
+      ·
+      <a href="https://www.linkedin.com/in/shabinesh/">resume</a>
+      ·
+    </div>
+
+    <dl class="external-links">
+      <dt>email</dt>
+      <dd><a href="mailto:sab@courierboy.info">sab@courierboy.info</a></dd>
+      <dt>sourcehut</dt>
+      <dd><a href="https://sr.ht/~sab">~sab</a></dd>
+      <dt>github</dt>
+      <dd><a href="https://github.com/shabinesh">github</a></dd>
+    </dl>
+
+    <small>
+      notes are mostly for my own reference, and I don't put so much effort writing. 
+    </small>
+  </aside>
+{{ end }}
