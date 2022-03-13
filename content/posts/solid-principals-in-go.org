@@ -1,6 +1,0 @@
----
-title: "Solid Principals in Go"
-date: 2020-05-07T23:47:42+02:00
-draft: true
----
-
