@@ -6,10 +6,21 @@ draft: false
 
 (in progress)
 
+* Bounded Context
+
+  Its a subdomain. Ubiquitous language are within bounded context. For
+  example, a person might be called a "Lead" in the marketing context,
+  "Customer" is Order context, "Subscriber" in subscription context.
+
+  There are [Polysemes](https://en.wikipedia.org/wiki/Polysemy), same
+  word could can mean different things between contexts.
+
+  And shared language between contexts. For example: "Product".
+
 * Aggregate and Aggregate root
 
   Aggregates are cluster of entities and values objects and define
-  boudaries around each. Goal of aggregate is to protect the
+  boundaries around each. Goal of aggregate is to protect the
   invariants and guarantee consistency.
 
   The size of the aggregate has an impact. Big aggregate will have
@@ -26,3 +37,19 @@ draft: false
   out carefully.
 
   Aggregate should be cohesive and not split between nodes. 
+
+* Domain Services
+
+  Operations which are external to aggregate and represents a domain
+  concept could be encapsulated into domain service. Domain services
+  are part of domain model and stateless.
+
+  #+begin_src :name examples
+  fn GetCurrentISOWeek() { ... }
+
+  fn CalculateTax(price Money) { ... }
+  #+end_src
+
+  In the preceding example, service involving clock could become a
+  domain service. This is useful for testing, by patching (monkey
+  patching/mocking) using the programming language tools.
