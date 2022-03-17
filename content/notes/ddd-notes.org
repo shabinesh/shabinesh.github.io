@@ -8,15 +8,15 @@ draft: false
 
 * Bounded Context
 
-  Its a subdomain. Ubiquitous language are within bounded context. For
-  example, a person might be called a "Lead" in the marketing context,
-  "Customer" is Order context, "Subscriber" in subscription context.
-
-  There are [Polysemes](https://en.wikipedia.org/wiki/Polysemy), same
-  word could can mean different things between contexts.
+  Its a subdomain. Ubiquitous language are within bounded context.
+  
+  There are [[https://en.wikipedia.org/wiki/Polysemy][Polysemes]], same word could can mean different things
+  between contexts.
 
   And shared language between contexts. For example: "Product".
 
+  [[/bounded-context.png]]
+  
 * Aggregate and Aggregate root
 
   Aggregates are cluster of entities and values objects and define
