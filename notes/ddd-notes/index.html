@@ -1,5 +1,8 @@
-<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Notes</title><meta name=apple-mobile-web-app-title content="Notes"><link rel=stylesheet href=/main.css></head><body><main class=index><article><a href=/>back</a><header><h1>DDD Notes <small>in notes</small></h1><small>2022-03-02</small></header><p>(in progress)</p><div id=outline-container-headline-1 class=outline-2><h2 id=headline-1>Aggregate and Aggregate root</h2><div id=outline-text-headline-1 class=outline-text-2><p>Aggregates are cluster of entities and values objects and define
-boudaries around each. Goal of aggregate is to protect the
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Notes</title><meta name=apple-mobile-web-app-title content="Notes"><link rel=stylesheet href=/main.css></head><body><main class=index><article><a href=/>back</a><header><h1>DDD Notes <small>in notes</small></h1><small>2022-03-02</small></header><p>(in progress)</p><div id=outline-container-headline-1 class=outline-2><h2 id=headline-1>Bounded Context</h2><div id=outline-text-headline-1 class=outline-text-2><p>Its a subdomain. Ubiquitous language are within bounded context. For
+example, a person might be called a "Lead" in the marketing context,
+"Customer" is Order context, "Subscriber" in subscription context.</p><p>There are [Polysemes](<a href=https://en.wikipedia.org/wiki/Polysemy),>https://en.wikipedia.org/wiki/Polysemy),</a> same
+word could can mean different things between contexts.</p><p>And shared language between contexts. For example: "Product".</p></div></div><div id=outline-container-headline-2 class=outline-2><h2 id=headline-2>Aggregate and Aggregate root</h2><div id=outline-text-headline-2 class=outline-text-2><p>Aggregates are cluster of entities and values objects and define
+boundaries around each. Goal of aggregate is to protect the
 invariants and guarantee consistency.</p><p>The size of the aggregate has an impact. Big aggregate will have
 issues guaranteeing consistency and forcing transactions on the
 whole aggregate may cause scalibility issues.</p><p>Aggregate roots is the entry point for the aggregate. The root
@@ -7,4 +10,10 @@ entity enforces invariants true and keeps the aggregate consistent,
 however, root can delegate other objects within the aggregate to
 ensure consistency.</p><p>If we find us trying to guarantee transactions between
 aggregates, then it is a sign that some invariants are not thought
-out carefully.</p><p>Aggregate should be cohesive and not split between nodes.</p></div></div></article></main></body></html>
+out carefully.</p><p>Aggregate should be cohesive and not split between nodes.</p></div></div><div id=outline-container-headline-3 class=outline-2><h2 id=headline-3>Domain Services</h2><div id=outline-text-headline-3 class=outline-text-2><p>Operations which are external to aggregate and represents a domain
+concept could be encapsulated into domain service. Domain services
+are part of domain model and stateless.</p><div class="src src-:name"><pre tabindex=0><code class=language-:name data-lang=:name>fn GetCurrentISOWeek() { ... }
+
+fn CalculateTax(price Money) { ... }</code></pre></div><p>In the preceding example, service involving clock could become a
+domain service. This is useful for testing, by patching (monkey
+patching/mocking) using the programming language tools.</p></div></div></article></main></body></html>
