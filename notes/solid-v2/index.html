@@ -1,0 +1,18 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Notes</title><meta name=apple-mobile-web-app-title content="Notes"><link rel=stylesheet href=/main.css></head><body><main class=index><article><a href=/>back</a><header><h1>Solid Summary <small>in notes</small></h1><small>2022-03-02</small></header><div id=outline-container-headline-1 class=outline-2><h2 id=headline-1>SOLID principles</h2><div id=outline-text-headline-1 class=outline-text-2><p>SOLID are guiding principles to organize functions, modules and
+classes.</p><div id=outline-container-headline-2 class=outline-3><h3 id=headline-2>Single Responsibility Principle</h3><div id=outline-text-headline-2 class=outline-text-3><p>SRP states there should be one reason for a module to
+change. Stakeholders are usually the reason to changes. The principle
+is voilated if change in one module affects code other stakeholders
+depend upon.</p></div></div><div id=outline-container-headline-3 class=outline-3><h3 id=headline-3>Open Closed Principle</h3><div id=outline-text-headline-3 class=outline-text-3><p>The core of a good software is any extension should only cause small
+changes. This could be acheived by organizing the dependencies and
+ensuring changes to one component does not affect others.</p><p>The dependencies are unidirectional creating a notion of layers or
+levels. Modules at the higher level are protected from changes
+introduced at the lower level.</p></div></div><div id=outline-container-headline-4 class=outline-3><h3 id=headline-4>Liskov Substituion Principle</h3><div id=outline-text-headline-4 class=outline-text-3><p>A program's behaviour is unchanged when an object of type T is
+replaced with object of type S, where S is a subtype of T.
+Voilations:</p><ol><li>A duck is replaced by a rubber duck.</li><li>A rectangle is replaced with square. Calculation of square of
+different from that of reactangle.</li></ol></div></div><div id=outline-container-headline-5 class=outline-3><h3 id=headline-5>Interface Segregation Principle</h3><div id=outline-text-headline-5 class=outline-text-3><p>A type should not depend on behaviours it doesn't use. A class
+`Employee` depends on a framework F, F in turn depends on X. Some
+feature of the X is not used. If the unused feature breaks which would
+inturn break F and Employee.</p></div></div><div id=outline-container-headline-6 class=outline-3><h3 id=headline-6>Dependency Inversion Principle</h3><div id=outline-text-headline-6 class=outline-text-3><p>Fleixble system should depend on abstraction instead of
+concretion. But dependeing upon concrete dependencies are
+inevitable. For example, the OS is usually a stable dependency. We are
+worries about dependencies that are volatile, which are under</p></div></div></div></div></article></main></body></html>
