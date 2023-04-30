@@ -1,0 +1,110 @@
+---
+title: "Quicksort"
+date: 2023-04-30T16:40:20+05:30
+---
+* Quicksort
+
+Quicksort is a efficient, easy to implement in place sorting
+algorithm. The average case for quicksort is O(n log n). Although
+merge sort is a better candidate when we take worst case complexity of
+Quicksort into account. However, quicksort has a smaller constant than
+mergesort, making it a better candidate for some cases.
+
+The algorithm is as follows:
+
+1. A pivot is chosen. The pivot is a number from the array.
+2. The array is rearranged. Elements smaller than pivot is on the left
+   side of the array and elements bigger than the pivot is moved to
+   right.
+3. After each iteration the pivot finds its suitable place.
+4. The left side of the array is sorted recursively.
+5. The right side of the array is sorted recursively.
+
+If we translate the above steps to code.
+
+
+#+begin_src golang
+package quicksort
+
+func Quicksort(arr []int) []int {
+	return quicksort(arr, 0, len(arr)-1)
+}
+
+func quicksort(arr []int, l, h int) []int {
+	if l < h {
+		k := partition(arr, 0, h)
+		quicksort(arr, 0, k-1)
+		quicksort(arr, k+1, h)
+	}
+
+	return arr
+}
+#+end_src
+
+Clearly *partition* function is doing the magic.
+
+* Variants of partition
+
+The most common implementations of /partition/ are /Lomuto partition scheme/ and /Hoare partitio scheme/.
+
+** Hoare partition scheme
+
+#+begin_src golang
+func partition(arr []int, lb, ub int) int {
+	pivot := arr[lb] // Choose the first element of array as pivot
+
+	// start and end are pointers beginning at the lower and upper bounds of the array
+	start, end := lb, ub
+	for {
+		// stop iterations if pointer cross each other.
+		if start > end {
+			break
+		}
+
+		// keep moving the start pointers towards right
+		// until an element bigger than pivot is found.
+		for arr[start] <= pivot {
+			start++
+		}
+
+		// move end pointer towards left of the array
+		// until element smaller than pivot is found.
+		for arr[end] > pivot {
+			end--
+		}
+
+		// swap the element of the array pointed by start and end.
+		arr[start], arr[end] = arr[end], arr[start]
+	}
+
+	// swap the pivot to start pointer position.
+	arr[lb], arr[start] = arr[start], arr[lb]
+
+	return start
+}
+#+end_src
+
+** Lomuto partition scheme
+
+This is a simpler implementation of the partitioning function.
+
+#+begin_src golang
+func partition(arr []int, lb, ub int) int {
+	pivot := arr[ub]
+
+	i := lb
+	for j := lb; j < ub; j++ {
+		if arr[j] <= pivot {
+			arr[i], arr[j] = arr[j], arr[i]
+			i++
+		}
+	}
+
+	arr[i], arr[ub] = arr[ub], arr[i]
+
+	return i
+}
+#+end_src
+
+*TODO*: This is actually not sorting elements properly.
+
