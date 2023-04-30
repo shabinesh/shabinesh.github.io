@@ -4,24 +4,23 @@ date: 2023-04-30T16:40:20+05:30
 ---
 * Quicksort
 
-Quicksort is a efficient, easy to implement in place sorting
+Quicksort is an efficient, easy-to-implement in-place sorting
 algorithm. The average case for quicksort is O(n log n). Although
-merge sort is a better candidate when we take worst case complexity of
+merge sort is a better candidate when we take the worst-case complexity of
 Quicksort into account. However, quicksort has a smaller constant than
 mergesort, making it a better candidate for some cases.
 
 The algorithm is as follows:
 
 1. A pivot is chosen. The pivot is a number from the array.
-2. The array is rearranged. Elements smaller than pivot is on the left
-   side of the array and elements bigger than the pivot is moved to
-   right.
+2. The array is rearranged. Elements smaller than the pivot are on the left
+   side of the array and elements bigger than the pivot are moved to
+   the right.
 3. After each iteration the pivot finds its suitable place.
 4. The left side of the array is sorted recursively.
 5. The right side of the array is sorted recursively.
 
 If we translate the above steps to code.
-
 
 #+begin_src golang
 package quicksort
