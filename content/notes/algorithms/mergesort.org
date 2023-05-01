@@ -1,0 +1,72 @@
+---
+title: "Mergesort"
+date: 2023-05-01T17:42:34+05:30
+---
+
+Mergesort is an efficient algorithm with the worst case of O(nlogn).
+
+Steps:
+1. The array is split into two parts.
+2. The array is recursively split until the base case /LENGTH(Array) =
+   1/ is reached.
+3. Merge the array. The arrays are merged by picking the smallest from
+   the two arrays.
+
+#+begin_src golang
+package mergesort
+
+func Mergesort(arr []int) []int {
+	// base case, the splitting ends here.
+	if len(arr) == 1 {
+		return arr
+	}
+
+	// Split the array into two parts. if there are 5 elements,
+	// the array is split into two arrays with 2 and 3 elements.
+	mid := len(arr) / 2
+	larr := arr[0:mid]
+	rarr := arr[mid:]
+
+	// Recursively call the sub arrays
+	l := Mergesort(larr)
+	r := Mergesort(rarr)
+
+	// Join the two arrays
+	return merge(l, r)
+}
+
+func merge(l, r []int) []int {
+	// Create a array to place the sorted values.
+	dest := make([]int, len(l)+len(r))
+	ll, lr := len(l), len(r)
+
+	// These 3 pointers keeps track of left array, right array
+	// and destination array
+	ln, rn, dn := 0, 0, 0
+
+	for ln < ll && rn < lr {
+		if l[ln] < r[rn] {
+			dest[dn] = l[ln]
+			ln++
+		} else {
+			dest[dn] = r[rn]
+			rn++
+		}
+		dn++
+	}
+
+	for ln < ll {
+		dest[dn] = l[ln]
+		ln++
+		dn++
+	}
+
+	for rn < lr {
+		dest[dn] = r[rn]
+		rn++
+		dn++
+	}
+
+	return dest
+}  
+#+end_src
