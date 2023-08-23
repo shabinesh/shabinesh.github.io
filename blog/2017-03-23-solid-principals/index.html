@@ -1,0 +1,151 @@
+<!doctype html><html lang=en-in><head><meta http-equiv=x-clacks-overhead content="GNU Terry Pratchett"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel="shortcut icon" href=http://shabinesh.github.io/images/favicon.png><title>SOLID principles in Golang | Sab's</title><meta name=title content="SOLID principles in Golang"><meta name=description content="Summary: What is SOLID? Golang&rsquo;s embodiment of SOLID as a language design This is again a post for myself, as a precursor to the common design pattern in game dev which is possibly a follow up post. The credits for any information put up here goes to Dave Cheney from where I have derived this material.
+What is SOLID? The SOLID principles are the top five, rather important patterns usually found the Object oriented programming languages."><meta name=keywords content="go,golang,go-design-patterns,"><meta property="og:title" content="SOLID principles in Golang"><meta property="og:description" content="Summary: What is SOLID? Golang&rsquo;s embodiment of SOLID as a language design This is again a post for myself, as a precursor to the common design pattern in game dev which is possibly a follow up post. The credits for any information put up here goes to Dave Cheney from where I have derived this material.
+What is SOLID? The SOLID principles are the top five, rather important patterns usually found the Object oriented programming languages."><meta property="og:type" content="article"><meta property="og:url" content="http://shabinesh.github.io/blog/2017-03-23-solid-principals/"><meta property="og:image" content="http://shabinesh.github.io/images/share.png"><meta property="article:section" content="blog"><meta property="article:published_time" content="2017-03-23T11:39:17+05:30"><meta property="article:modified_time" content="2017-03-23T11:39:17+05:30"><meta property="og:site_name" content="Sab's"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="http://shabinesh.github.io/images/share.png"><meta name=twitter:title content="SOLID principles in Golang"><meta name=twitter:description content="Summary: What is SOLID? Golang&rsquo;s embodiment of SOLID as a language design This is again a post for myself, as a precursor to the common design pattern in game dev which is possibly a follow up post. The credits for any information put up here goes to Dave Cheney from where I have derived this material.
+What is SOLID? The SOLID principles are the top five, rather important patterns usually found the Object oriented programming languages."><meta itemprop=name content="SOLID principles in Golang"><meta itemprop=description content="Summary: What is SOLID? Golang&rsquo;s embodiment of SOLID as a language design This is again a post for myself, as a precursor to the common design pattern in game dev which is possibly a follow up post. The credits for any information put up here goes to Dave Cheney from where I have derived this material.
+What is SOLID? The SOLID principles are the top five, rather important patterns usually found the Object oriented programming languages."><meta itemprop=datePublished content="2017-03-23T11:39:17+05:30"><meta itemprop=dateModified content="2017-03-23T11:39:17+05:30"><meta itemprop=wordCount content="1008"><meta itemprop=image content="http://shabinesh.github.io/images/share.png"><meta itemprop=keywords content="go,golang,go-design-patterns,"><meta name=referrer content="no-referrer-when-downgrade"><style>body{font-family:Verdana,sans-serif;margin:auto;padding:20px;max-width:720px;text-align:left;background-color:#fff;word-wrap:break-word;overflow-wrap:break-word;line-height:1.5;color:#444}h1,h2,h3,h4,h5,h6,strong,b{color:#222}a{color:#3273dc}.title{text-decoration:none;border:0}.title span{font-weight:400}nav a{margin-right:10px}textarea{width:100%;font-size:16px}input{font-size:16px}content{line-height:1.6}table{width:100%}img{max-width:100%}code{padding:2px 5px;background-color:#f2f2f2}pre code{color:#222;display:block;padding:20px;white-space:pre-wrap;font-size:14px;overflow-x:auto}div.highlight pre{background-color:initial;color:initial}div.highlight code{background-color:unset;color:unset}blockquote{border-left:1px solid #999;color:#222;padding-left:20px;font-style:italic}footer{padding:25px;text-align:center}.helptext{color:#777;font-size:small}.errorlist{color:#eba613;font-size:small}ul.blog-posts{list-style-type:none;padding:unset}ul.blog-posts li{display:flex}ul.blog-posts li span{flex:0 0 130px}ul.blog-posts li a:visited{color:#8b6fcb}@media(prefers-color-scheme:dark){body{background-color:#333;color:#ddd}h1,h2,h3,h4,h5,h6,strong,b{color:#eee}a{color:#8cc2dd}code{background-color:#777}pre code{color:#ddd}blockquote{color:#ccc}textarea,input{background-color:#252525;color:#ddd}.helptext{color:#aaa}}</style></head><body><header><a href=/ class=title><h2>Sab's</h2></a><nav><a href=/>Home</a>
+<a href=/blog>Blog</a></nav></header><main><h1>SOLID principles in Golang</h1><p><i><time datetime=2017-03-23 pubdate>23 Mar, 2017</time></i></p><content><h2 id=summary>Summary:</h2><ul><li>What is SOLID?</li><li>Golang&rsquo;s embodiment of SOLID as a language design</li></ul><p>This is again a post for myself, as a precursor to the common design pattern in game dev which is possibly a follow up post. The credits for any information put up here goes to Dave Cheney from where I have derived this material.</p><h2 id=what-is-solid>What is SOLID?</h2><p>The SOLID principles are the top five, rather important patterns usually found the Object oriented programming languages. Ref: <a href=https://en.wikipedia.org/wiki/SOLID_(object-oriented_design)>Wikipedia</a></p><p>However the post is not intended to learn these principles, there are much better resources elsewhere for that. Here I try to relate Go&rsquo;s inherant adoptions of these design patterns part of the language itself. However such enforcements are not strict, its purely based on the programmer. Go is not a Object oriented language, rather a Object based language.</p><h2 id=single-responsibility-principal-srp>(S)ingle responsibility principal (SRP)</h2><p>By definition, there should be only one responsibility the class should have. The cohesion is the strength of the relationship between functionality. A entity which statisfies SRP is also highly cohesive.</p><blockquote><p>A class should have only one reason to change
+&ndash; Robert C. Martin</p></blockquote><p>Incase of Go, there are no classes but this focus on single functionality is acheivable through packages. The idea of (packge oriented design)[https://www.goinggo.net/2017/02/package-oriented-design.html] strongly makes sense. A package in Go insists on foundational pieces which applications could use/reuse.</p><ul><li>It starts with a name, the list <a href=https://golang.org/pkg/>here</a> is standard library and their names themselves are intutive and limited to the domain.</li><li>The names &lsquo;common&rsquo;, &lsquo;utils&rsquo;, are common code smells.</li><li>Go encourages the attribute to be private inside a package, and only those that is required by the API you would want to make public by starting an attribute with a uppercase.</li></ul><p>Also read <a href=https://www.goinggo.net/2017/02/design-philosophy-on-packaging.html>this</a>.</p><h2 id=openclosed-principal>(O)pen/Closed principal</h2><p>By definition, a class should be open for extension and closed for modification. From wikipedia:</p><blockquote><p>A class is closed, since it may be compiled, stored in a library, baselined, and used by client classes. But it is also open, since any new class may use it as parent, adding new features. When a descendant class is defined, there is no need to change the original or to disturb its clients</p></blockquote><p>In Go, Such extensions are possible without changing the original type. But before that understand Go&rsquo;s type doesn&rsquo;t carry over methods.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Animal</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>name</span> <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>a</span> <span style=color:#a6e22e>Animal</span>) <span style=color:#a6e22e>eat</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Print</span>(<span style=color:#e6db74>&#34;eat grass!&#34;</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Human</span> <span style=color:#a6e22e>Animal</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>h</span> <span style=color:#a6e22e>Human</span>) <span style=color:#a6e22e>fight</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Print</span>(<span style=color:#e6db74>&#34;Fight the FUD!&#34;</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>animal</span> <span style=color:#a6e22e>Animal</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>human</span> <span style=color:#a6e22e>Human</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>animal</span>.<span style=color:#a6e22e>eat</span>() 	<span style=color:#75715e>// Prints &#34;eat grass!&#34;
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>human</span>.<span style=color:#a6e22e>fight</span>()		<span style=color:#75715e>// Prints &#34;Fight the FUD!&#34;
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>animal</span>.<span style=color:#a6e22e>fight</span>() <span style=color:#75715e>// WON&#39;T WORK!
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>human</span>.<span style=color:#a6e22e>eat</span>() <span style=color:#75715e>// WON&#39;T WORK! 
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>}
+</span></span></code></pre></div><p>This is important, the types <code>Animal</code> and <code>Human</code> have same layout in the memory, but their methods(behaviour) doesn&rsquo;t interfere with each other; But for <code>Human</code> to extend <code>Animal</code> there is type embedding in Go.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Animal</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>name</span> <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>a</span> <span style=color:#a6e22e>Animal</span>) <span style=color:#a6e22e>eat</span>() <span style=color:#66d9ef>string</span> {
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#34;cabbage&#34;</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Human</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>Animal</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>age</span> <span style=color:#66d9ef>int</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>h</span> <span style=color:#a6e22e>Human</span>) <span style=color:#a6e22e>drink</span>() <span style=color:#66d9ef>string</span> {
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>h</span>.<span style=color:#a6e22e>age</span> &gt; <span style=color:#ae81ff>18</span> {
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#34;can drink&#34;</span>
+</span></span><span style=display:flex><span>	} <span style=color:#66d9ef>else</span> {
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#34;cannot drink&#34;</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>h</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>Human</span>{<span style=color:#a6e22e>Animal</span>{<span style=color:#a6e22e>name</span>: <span style=color:#e6db74>&#34;Sab&#34;</span>}, <span style=color:#ae81ff>10</span>}
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>h</span>.<span style=color:#a6e22e>drink</span>()
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>h</span>.<span style=color:#a6e22e>eat</span>()
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;%s is %d, eats %s and %s &#34;</span>, <span style=color:#a6e22e>h</span>.<span style=color:#a6e22e>name</span>, <span style=color:#a6e22e>h</span>.<span style=color:#a6e22e>age</span>, <span style=color:#a6e22e>h</span>.<span style=color:#a6e22e>eat</span>(), <span style=color:#a6e22e>h</span>.<span style=color:#a6e22e>drink</span>())
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Above, <code>Human</code> has got both attributes & methods of <code>Animal</code>.</p><h2 id=liskov-substitution-principal>Liskov Substitution principal</h2><blockquote><p>&ldquo;objects in a program should be replaceable with instances of their subtypes without altering the correctness of that program&rdquo;</p></blockquote><p>In Go the idea of abstract base class is acheived with interfaces, any object can implicitly satisfy the interface by implementing the method of the interface; I shall start with the violation, and then to the suitable example; this example is from a project I worked on recently.</p><p>Each component is a induvidual entity in the game and scene represents the collection of them,</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>component</span> {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>draw</span>()
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>resize</span>(<span style=color:#66d9ef>int</span>, <span style=color:#66d9ef>int</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>Scene</span> {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>objs</span> []<span style=color:#a6e22e>component</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>s</span> <span style=color:#a6e22e>Scene</span>) <span style=color:#a6e22e>draw</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>c</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>s</span>.<span style=color:#a6e22e>objs</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>objs</span>.<span style=color:#a6e22e>draw</span>()	<span style=color:#75715e>// Liskovs here
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	}
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>bird</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// lots of fields here
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>b</span> <span style=color:#a6e22e>bird</span>) <span style=color:#a6e22e>draw</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// Copy each field from json to d
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>} 
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>b</span> <span style=color:#a6e22e>bird</span>) <span style=color:#a6e22e>resize</span>(<span style=color:#a6e22e>width</span>, <span style=color:#a6e22e>height</span> <span style=color:#66d9ef>int</span>) {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// Resize the obj texture
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>background</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// Fields here
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>}
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>p</span> <span style=color:#a6e22e>background</span>) <span style=color:#a6e22e>draw</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// Copy each field from json to d
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>} 
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>p</span> <span style=color:#a6e22e>background</span>) <span style=color:#a6e22e>resize</span>(<span style=color:#a6e22e>width</span>, <span style=color:#a6e22e>height</span> <span style=color:#66d9ef>int</span>) {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// ... return total avaliable count
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>}
+</span></span></code></pre></div><p>But, later when I added new levels I wanted to change the background of the game and then went on to do this:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>component</span> {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>draw</span>()
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>resize</span>(<span style=color:#66d9ef>int</span>, <span style=color:#66d9ef>int</span>)
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>updateTexture</span>(<span style=color:#f92672>*</span><span style=color:#a6e22e>texture</span>) <span style=color:#75715e>// &lt;- added this one
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>}
+</span></span></code></pre></div><p>When that change was added to the <code>component</code> interface, which wasn&rsquo;t required by the other components since they won&rsquo;t change I am forced to make other components be polluted with <code>updateTexture()</code> in order to satisfy the interface.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>b</span> <span style=color:#a6e22e>background</span>) <span style=color:#a6e22e>updateTexture</span>(<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>texture</span>) { <span style=color:#75715e>// required for the background change
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#75715e>// change the texture
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>b</span> <span style=color:#a6e22e>bird</span>) <span style=color:#a6e22e>updateTexture</span>(<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>texture</span>) { <span style=color:#75715e>// not required for the bird
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#66d9ef>return</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>This a voilation of Liskov&rsquo;s, but the solution lies in the <code>I</code> of the <code>SOLID</code>.</p><h2 id=interface-segregation-principal>Interface Segregation Principal</h2><blockquote><p>Clients should not be forced to depend upon interfaces that they do not use,</p></blockquote><p>In the above example of the game components; the interface is fat and polluted, why will a Renderer system need to update a texture? Why will a Texture Manager system need to draw? Different clients require different interfaces. We shall split the interfaces into smaller logical pieces</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>drawableComponent</span> <span style=color:#66d9ef>interface</span> { <span style=color:#75715e>// interface for drawable components
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>draw</span>()
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>updatableComponent</span> <span style=color:#66d9ef>interface</span> { <span style=color:#75715e>// updatable components
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>resize</span>()
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>updateTexture</span>()
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>draw</span>(<span style=color:#a6e22e>obj</span> <span style=color:#a6e22e>drawableComponent</span>) {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>obj</span>.<span style=color:#a6e22e>draw</span>()
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>resize</span>(<span style=color:#a6e22e>obj</span> <span style=color:#a6e22e>updatableComponent</span>) {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>obj</span>.<span style=color:#a6e22e>resize</span>()
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>changeTexture</span>(<span style=color:#a6e22e>obj</span> <span style=color:#a6e22e>updatableComponent</span>) {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Print</span>(<span style=color:#e6db74>&#34;update texture&#34;</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>gameEntity</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>g</span> <span style=color:#a6e22e>gameEntity</span>) <span style=color:#a6e22e>resize</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;resized&#34;</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>g</span> <span style=color:#a6e22e>gameEntity</span>) <span style=color:#a6e22e>draw</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;draw&#34;</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>g</span> <span style=color:#a6e22e>gameEntity</span>) <span style=color:#a6e22e>updateTexture</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;update Texture&#34;</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>obj</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>gameEntity</span>{}
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>draw</span>(<span style=color:#a6e22e>obj</span>)
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>resize</span>(<span style=color:#a6e22e>obj</span>)
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>changeTexture</span>(<span style=color:#a6e22e>obj</span>)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=dependency-invenrsion-principal>Dependency invenrsion principal</h2><p>Work in progress&mldr;.</p></content><p><a href=http://shabinesh.github.io/tags/go/>#go</a>
+<a href=http://shabinesh.github.io/tags/golang/>#golang</a>
+<a href=http://shabinesh.github.io/tags/go-design-patterns/>#go-design-patterns</a></p></main><footer>Made with <a href=https://github.com/janraasch/hugo-bearblog/>Hugo ʕ•ᴥ•ʔ Bear</a></footer></body></html>
