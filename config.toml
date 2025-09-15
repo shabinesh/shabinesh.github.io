@@ -1,0 +1,15 @@
+contentDir = "blog"
+layoutDir = "layouts"
+publishDir = "public"
+buildDrafts = false
+baseURL = "https://the.pedestrian.in/"
+canonifyURLs = true
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+
+[params]
+  description = "Sab's"
+  author = "Sab"
+
