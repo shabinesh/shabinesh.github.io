@@ -1,7 +1,6 @@
 ---
 title: "Learning by unlearning"
 date: 2025-09-15T12:19:12+05:30
-draft: true
 ---
 
 In my view, learning should be liberating, not binding.
